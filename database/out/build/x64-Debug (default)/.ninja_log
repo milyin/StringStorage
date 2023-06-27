@@ -1,0 +1,17 @@
+# ninja log v5
+99	2456	709586692	examples/CMakeFiles/pack.dir/pack.c.obj	19dea47e6af16773
+24	3563	709586693	database/CMakeFiles/database.dir/Database.cpp.obj	1a60f37e12ef3c6b
+74	3637	709586693	src/CMakeFiles/btree_packed_db.dir/btree_packed_db_c_api.cpp.obj	42190b79f13e7090
+90	3690	709586693	src/CMakeFiles/btree_packed_db.dir/FileHandler.cpp.obj	7ccc8ffbedcdc171
+16	3913	709586693	database/CMakeFiles/database.dir/database_lib.cpp.obj	9faf00505fd82c53
+2457	3954	709586693	examples/CMakeFiles/unpack.dir/unpack.c.obj	62bee0d9939b00c5
+1	4015	709586693	database/CMakeFiles/database.dir/__/src/FileHandler.cpp.obj	b86d826538952b2c
+82	4026	709586693	src/CMakeFiles/btree_packed_db.dir/Compressor.cpp.obj	59e20f5f8f8f0606
+9	4053	709586693	database/CMakeFiles/database.dir/__/src/Compressor.cpp.obj	6daad81ab7c3ce2
+59	4126	709586693	tests/CMakeFiles/bplustree.dir/bplustree.cpp.obj	a33b479d7e343af6
+66	4194	709586693	src/CMakeFiles/btree_packed_db.dir/BTreePackedDb.cpp.obj	6084d005a098984f
+4194	4441	709586693	src/btree_packed_db.lib	1506603e53b63bb0
+4126	5288	709586694	tests/bplustree.exe	4ce3777aa7c3ee7d
+4053	5345	709586694	database/database.exe	f3e92e8aa8e8fea4
+4457	5522	709586695	examples/unpack.exe	f9bc39df6049cef6
+4442	5523	709586695	examples/pack.exe	9901ad48d31cccb3
