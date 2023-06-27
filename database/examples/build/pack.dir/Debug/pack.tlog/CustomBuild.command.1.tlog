@@ -1,0 +1,10 @@
+^C:\USERS\ILYIN\GITHUB\KEYVALUEDATABASE\DATABASE\EXAMPLES\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/ilyin/GitHub/KeyValueDatabase/database/examples -BC:/Users/ilyin/GitHub/KeyValueDatabase/database/examples/build --check-stamp-file C:/Users/ilyin/GitHub/KeyValueDatabase/database/examples/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
