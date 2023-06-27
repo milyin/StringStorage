@@ -1,0 +1,1281 @@
+% !TeX TXS-program:bibliography = txs:///biber
+\documentclass[14pt, russian]{scrartcl}
+\let\counterwithout\relax
+\let\counterwithin\relax
+%\usepackage{lmodern}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{extsizes}
+\usepackage{subfig}
+\usepackage[export]{adjustbox}
+\usepackage{tocvsec2} % возможность менять учитываемую глубину разделов в оглавлении
+\usepackage[subfigure]{tocloft}
+\usepackage[newfloat]{minted}
+\captionsetup[listing]{position=top}
+
+
+\usepackage{fancyvrb}
+\usepackage{ulem,bm,mathrsfs,ifsym} %зачеркивания, особо жирный стиль и RSFS начертание
+\usepackage{sectsty} % переопределение стилей подразделов
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Поля и разметка страницы %%%
+\usepackage{pdflscape}                              % Для включения альбомных страниц
+\usepackage{geometry}                               % Для последующего задания полей
+\geometry{a4paper,tmargin=2cm,bmargin=2cm,lmargin=3cm,rmargin=1cm} % тоже самое, но лучше
+
+%%% Математические пакеты %%%
+\usepackage{amsthm,amsfonts,amsmath,amssymb,amscd}  % Математические дополнения от AMS
+\usepackage{mathtools}                              % Добавляет окружение multlined
+\usepackage[perpage]{footmisc}
+%\usepackage{times}
+
+%%%% Установки для размера шрифта 14 pt %%%%
+%% Формирование переменных и констант для сравнения (один раз для всех подключаемых файлов)%%
+%% должно располагаться до вызова пакета fontspec или polyglossia, потому что они сбивают его работу
+%\newlength{\curtextsize}
+%\newlength{\bigtextsize}
+%\setlength{\bigtextsize}{13pt}
+\KOMAoptions{fontsize=14pt}
+
+\makeatletter
+\def\showfontsize{\f@size{} point}
+\makeatother
+
+%\makeatletter
+%\show\f@size                                       % неплохо для отслеживания, но вызывает стопорение процесса, если документ компилируется без команды  -interaction=nonstopmode 
+%\setlength{\curtextsize}{\f@size pt}
+%\makeatother
+
+%шрифт times
+\usepackage{tempora}
+%\usepackage{pscyr}
+%\setmainfont[Ligatures={TeX,Historic}]{Times New Roman}
+
+   %%% Решение проблемы копирования текста в буфер кракозябрами
+%    \input glyphtounicode.tex
+%    \input glyphtounicode-cmr.tex %from pdfx package
+%    \pdfgentounicode=1
+    \usepackage{cmap}                               % Улучшенный поиск русских слов в полученном pdf-файле
+    \usepackage[T1]{fontenc}                       % Поддержка русских букв
+    \usepackage[utf8]{inputenc}                     % Кодировка utf8
+    \usepackage[english, main=russian]{babel}            % Языки: русский, английский
+%   \IfFileExists{pscyr.sty}{\usepackage{pscyr}}{}  % Красивые русские шрифты
+%\renewcommand{\rmdefault}{ftm}
+%%% Оформление абзацев %%%
+\usepackage{indentfirst}                            % Красная строка
+%\usepackage{eskdpz}
+
+%%% Таблицы %%%
+\usepackage{longtable}                              % Длинные таблицы
+\usepackage{multirow,makecell,array}                % Улучшенное форматирование таблиц
+\usepackage{booktabs}                               % Возможность оформления таблиц в классическом книжном стиле (при правильном использовании не противоречит ГОСТ)
+
+%%% Общее форматирование
+\usepackage{soulutf8}                               % Поддержка переносоустойчивых подчёркиваний и зачёркиваний
+\usepackage{icomma}                                 % Запятая в десятичных дробях
+
+
+
+%%% Изображения %%%
+\usepackage{graphicx}                               % Подключаем пакет работы с графикой
+\usepackage{wrapfig}
+
+%%% Списки %%%
+\usepackage{enumitem}
+
+%%% Подписи %%%
+\usepackage{caption}                                % Для управления подписями (рисунков и таблиц) % Может управлять номерами рисунков и таблиц с caption %Иногда может управлять заголовками в списках рисунков и таблиц
+%% Использование:
+%\begin{table}[h!]\ContinuedFloat - чтобы не переключать счетчик
+%\captionsetup{labelformat=continued}% должен стоять до самого caption
+%\caption{}
+% либо ручками \caption*{Продолжение таблицы~\ref{...}.} :)
+
+%%% Интервалы %%%
+\addto\captionsrussian{%
+  \renewcommand{\listingname}{Листинг}%
+}
+%%% Счётчики %%%
+\usepackage[figure,table,section]{totalcount}               % Счётчик рисунков и таблиц
+\DeclareTotalCounter{lstlisting}
+\usepackage{totcount}                               % Пакет создания счётчиков на основе последнего номера подсчитываемого элемента (может требовать дважды компилировать документ)
+\usepackage{totpages}                               % Счётчик страниц, совместимый с hyperref (ссылается на номер последней страницы). Желательно ставить последним пакетом в преамбуле
+
+%%% Продвинутое управление групповыми ссылками (пока только формулами) %%%
+%% Кодировки и шрифты %%%
+
+%   \newfontfamily{\cyrillicfont}{Times New Roman}
+%   \newfontfamily{\cyrillicfonttt}{CMU Typewriter Text}
+	%\setmainfont{Times New Roman}
+	%\newfontfamily\cyrillicfont{Times New Roman}
+	%\setsansfont{Times New Roman}                    %% задаёт шрифт без засечек
+%	\setmonofont{Liberation Mono}               %% задаёт моноширинный шрифт
+%    \IfFileExists{pscyr.sty}{\renewcommand{\rmdefault}{ftm}}{}
+%%% Интервалы %%%
+%linespread-реализация ближе к реализации полуторного интервала в ворде.
+%setspace реализация заточена под шрифты 10, 11, 12pt, под остальные кегли хуже, но всё же ближе к типографской классике. 
+\linespread{1.3}                    % Полуторный интервал (ГОСТ Р 7.0.11-2011, 5.3.6)
+%\renewcommand{\@biblabel}[1]{#1}
+
+%%% Гиперссылки %%%
+\usepackage{hyperref}
+
+%%% Выравнивание и переносы %%%
+\sloppy                             % Избавляемся от переполнений
+\clubpenalty=10000                  % Запрещаем разрыв страницы после первой строки абзаца
+\widowpenalty=10000                 % Запрещаем разрыв страницы после последней строки абзаца
+
+\makeatletter % малые заглавные, small caps shape
+\let\@@scshape=\scshape
+\renewcommand{\scshape}{%
+  \ifnum\strcmp{\f@series}{bx}=\z@
+    \usefont{T1}{cmr}{bx}{sc}%
+  \else
+    \ifnum\strcmp{\f@shape}{it}=\z@
+      \fontshape{scsl}\selectfont
+    \else
+      \@@scshape
+    \fi
+  \fi}
+\makeatother
+
+%%% Подписи %%%
+%\captionsetup{%
+%singlelinecheck=off,                % Многострочные подписи, например у таблиц
+%skip=2pt,                           % Вертикальная отбивка между подписью и содержимым рисунка или таблицы определяется ключом
+%justification=centering,            % Центрирование подписей, заданных командой \caption
+%}
+%%%        Подключение пакетов                 %%%
+\usepackage{ifthen}                 % добавляет ifthenelse
+%%% Инициализирование переменных, не трогать!  %%%
+\newcounter{intvl}
+\newcounter{otstup}
+\newcounter{contnumeq}
+\newcounter{contnumfig}
+\newcounter{contnumtab}
+\newcounter{pgnum}
+\newcounter{bibliosel}
+\newcounter{chapstyle}
+\newcounter{headingdelim}
+\newcounter{headingalign}
+\newcounter{headingsize}
+\newcounter{tabcap}
+\newcounter{tablaba}
+\newcounter{tabtita}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Область упрощённого управления оформлением %%%
+
+%% Интервал между заголовками и между заголовком и текстом
+% Заголовки отделяют от текста сверху и снизу тремя интервалами (ГОСТ Р 7.0.11-2011, 5.3.5)
+\setcounter{intvl}{3}               % Коэффициент кратности к размеру шрифта
+
+%% Отступы у заголовков в тексте
+\setcounter{otstup}{0}              % 0 --- без отступа; 1 --- абзацный отступ
+
+%% Нумерация формул, таблиц и рисунков
+\setcounter{contnumeq}{1}           % Нумерация формул: 0 --- пораздельно (во введении подряд, без номера раздела); 1 --- сквозная нумерация по всей диссертации
+\setcounter{contnumfig}{1}          % Нумерация рисунков: 0 --- пораздельно (во введении подряд, без номера раздела); 1 --- сквозная нумерация по всей диссертации
+\setcounter{contnumtab}{1}          % Нумерация таблиц: 0 --- пораздельно (во введении подряд, без номера раздела); 1 --- сквозная нумерация по всей диссертации
+
+%% Оглавление
+\setcounter{pgnum}{0}               % 0 --- номера страниц никак не обозначены; 1 --- Стр. над номерами страниц (дважды компилировать после изменения)
+
+%% Библиография
+\setcounter{bibliosel}{1}           % 0 --- встроенная реализация с загрузкой файла через движок bibtex8; 1 --- реализация пакетом biblatex через движок biber
+
+%% Текст и форматирование заголовков
+\setcounter{chapstyle}{1}           % 0 --- разделы только под номером; 1 --- разделы с названием "Глава" перед номером
+\setcounter{headingdelim}{1}        % 0 --- номер отделен пропуском в 1em или \quad; 1 --- номера разделов и приложений отделены точкой с пробелом, подразделы пропуском без точки; 2 --- номера разделов, подразделов и приложений отделены точкой с пробелом.
+
+%% Выравнивание заголовков в тексте
+\setcounter{headingalign}{0}        % 0 --- по центру; 1 --- по левому краю
+
+%% Размеры заголовков в тексте
+\setcounter{headingsize}{0}         % 0 --- по ГОСТ, все всегда 14 пт; 1 --- пропорционально изменяющийся размер в зависимости от базового шрифта
+
+%% Подпись таблиц
+\setcounter{tabcap}{0}              % 0 --- по ГОСТ, номер таблицы и название разделены тире, выровнены по левому краю, при необходимости на нескольких строках; 1 --- подпись таблицы не по ГОСТ, на двух и более строках, дальнейшие настройки: 
+%Выравнивание первой строки, с подписью и номером
+\setcounter{tablaba}{2}             % 0 --- по левому краю; 1 --- по центру; 2 --- по правому краю
+%Выравнивание строк с самим названием таблицы
+\setcounter{tabtita}{1}             % 0 --- по левому краю; 1 --- по центру; 2 --- по правому краю
+
+%%% Рисунки %%%
+\DeclareCaptionLabelSeparator*{emdash}{~--- }             % (ГОСТ 2.105, 4.3.1)
+\captionsetup[figure]{labelsep=emdash,font=onehalfspacing,position=bottom}
+
+%%% Таблицы %%%
+\ifthenelse{\equal{\thetabcap}{0}}{%
+    \newcommand{\tabcapalign}{\raggedright}  % по левому краю страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetablaba}{0} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabcapalign}{\raggedright}  % по левому краю страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetablaba}{1} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabcapalign}{\centering}    % по центру страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetablaba}{2} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabcapalign}{\raggedleft}   % по правому краю страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetabtita}{0} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabtitalign}{\raggedright}  % по левому краю страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetabtita}{1} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabtitalign}{\centering}    % по центру страницы или аналога parbox
+}
+
+\ifthenelse{\equal{\thetabtita}{2} \AND \equal{\thetabcap}{1}}{%
+    \newcommand{\tabtitalign}{\raggedleft}   % по правому краю страницы или аналога parbox
+}
+
+\DeclareCaptionFormat{tablenocaption}{\tabcapalign #1\strut}        % Наименование таблицы отсутствует
+\ifthenelse{\equal{\thetabcap}{0}}{%
+    \DeclareCaptionFormat{tablecaption}{\tabcapalign #1#2#3}
+    \captionsetup[table]{labelsep=emdash}                       % тире как разделитель идентификатора с номером от наименования
+}{%
+    \DeclareCaptionFormat{tablecaption}{\tabcapalign #1#2\par%  % Идентификатор таблицы на отдельной строке
+        \tabtitalign{#3}}                                       % Наименование таблицы строкой ниже
+    \captionsetup[table]{labelsep=space}                        % пробельный разделитель идентификатора с номером от наименования
+}
+\captionsetup[table]{format=tablecaption,singlelinecheck=off,font=onehalfspacing,position=top,skip=-5pt}  % многострочные наименования и прочее
+\DeclareCaptionLabelFormat{continued}{Продолжение таблицы~#2}
+\setlength{\belowcaptionskip}{.2cm}
+\setlength{\intextsep}{0ex}
+
+%%% Подписи подрисунков %%%
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}           % Буквенные номера подрисунков
+\captionsetup[subfigure]{font={normalsize},               % Шрифт подписи названий подрисунков (не отличается от основного)
+    labelformat=brace,                                    % Формат обозначения подрисунка
+    justification=centering,                              % Выключка подписей (форматирование), один из вариантов            
+}
+%\DeclareCaptionFont{font12pt}{\fontsize{12pt}{13pt}\selectfont} % объявляем шрифт 12pt для использования в подписях, тут же надо интерлиньяж объявлять, если не наследуется
+%\captionsetup[subfigure]{font={font12pt}}                 % Шрифт подписи названий подрисунков (всегда 12pt)
+
+%%% Настройки гиперссылок %%%
+
+\definecolor{linkcolor}{rgb}{0.0,0,0}
+\definecolor{citecolor}{rgb}{0,0.0,0}
+\definecolor{urlcolor}{rgb}{0,0,0}
+
+\hypersetup{
+    linktocpage=true,           % ссылки с номера страницы в оглавлении, списке таблиц и списке рисунков
+%    linktoc=all,                % both the section and page part are links
+%    pdfpagelabels=false,        % set PDF page labels (true|false)
+    plainpages=true,           % Forces page anchors to be named by the Arabic form  of the page number, rather than the formatted form
+    colorlinks,                 % ссылки отображаются раскрашенным текстом, а не раскрашенным прямоугольником, вокруг текста
+    linkcolor={linkcolor},      % цвет ссылок типа ref, eqref и подобных
+    citecolor={citecolor},      % цвет ссылок-цитат
+    urlcolor={urlcolor},        % цвет гиперссылок
+    pdflang={ru},
+}
+\urlstyle{same}
+%%% Шаблон %%%
+%\DeclareRobustCommand{\todo}{\textcolor{red}}       % решаем проблему превращения названия цвета в результате \MakeUppercase, http://tex.stackexchange.com/a/187930/79756 , \DeclareRobustCommand protects \todo from expanding inside \MakeUppercase
+\setlength{\parindent}{2.5em}                       % Абзацный отступ. Должен быть одинаковым по всему тексту и равен пяти знакам (ГОСТ Р 7.0.11-2011, 5.3.7).
+
+%%% Списки %%%
+% Используем дефис для ненумерованных списков (ГОСТ 2.105-95, 4.1.7)
+%\renewcommand{\labelitemi}{\normalfont\bfseries~{---}} 
+\renewcommand{\labelitemi}{\bfseries~{---}} 
+\setlist{nosep,%                                    % Единый стиль для всех списков (пакет enumitem), без дополнительных интервалов.
+    labelindent=\parindent,leftmargin=*%            % Каждый пункт, подпункт и перечисление записывают с абзацного отступа (ГОСТ 2.105-95, 4.1.8)
+}
+%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{xltxtra} % load xunicode
+
+\usepackage{ragged2e}
+\usepackage[explicit]{titlesec}
+\usepackage{placeins}
+\usepackage{xparse}
+\usepackage{csquotes}
+
+\usepackage{listingsutf8}
+\usepackage{url} %пакеты расширений
+\usepackage{algorithm, algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{blkarray}
+\usepackage{chngcntr}
+\usepackage{tabularx}
+\usepackage[backend=biber, 
+    bibstyle=gost-numeric,
+    citestyle=nature]{biblatex}
+\newcommand*\template[1]{\text{<}#1\text{>}}
+\addbibresource{biblio.bib}
+  
+\titleformat{name=\section,numberless}[block]{\normalfont\Large\centering}{}{0em}{#1}
+\titleformat{\section}[block]{\normalfont\Large\bfseries\raggedright}{}{0em}{\thesection\hspace{0.25em}#1}
+\titleformat{\subsection}[block]{\normalfont\Large\bfseries\raggedright}{}{0em}{\thesubsection\hspace{0.25em}#1}
+\titleformat{\subsubsection}[block]{\normalfont\large\bfseries\raggedright}{}{0em}{\thesubsubsection\hspace{0.25em}#1}
+
+\let\Algorithm\algorithm
+\renewcommand\algorithm[1][]{\Algorithm[#1]\setstretch{1.5}}
+%\renewcommand{\listingscaption}{Листинг}
+
+\usepackage{pifont}
+\usepackage{calc}
+\usepackage{suffix}
+\usepackage{csquotes}
+\DeclareQuoteStyle{russian}
+    {\guillemotleft}{\guillemotright}[0.025em]
+    {\quotedblbase}{\textquotedblleft}
+\ExecuteQuoteOptions{style=russian}
+\newcommand{\enq}[1]{\enquote{#1}}  
+\newcommand{\eng}[1]{\begin{english}#1\end{english}}
+% Подчиненные счетчики в окружениях http://old.kpfu.ru/journals/izv_vuz/arch/sample1251.tex
+\newcounter{cTheorem} 
+\newcounter{cDefinition}
+\newcounter{cConsequent}
+\newcounter{cExample}
+\newcounter{cLemma}
+\newcounter{cConjecture}
+\newtheorem{Theorem}{Теорема}[cTheorem]
+\newtheorem{Definition}{Определение}[cDefinition]
+\newtheorem{Consequent}{Следствие}[cConsequent]
+\newtheorem{Example}{Пример}[cExample]
+\newtheorem{Lemma}{Лемма}[cLemma]
+\newtheorem{Conjecture}{Гипотеза}[cConjecture]
+
+\renewcommand{\theTheorem}{\arabic{Theorem}}
+\renewcommand{\theDefinition}{\arabic{Definition}}
+\renewcommand{\theConsequent}{\arabic{Consequent}}
+\renewcommand{\theExample}{\arabic{Example}}
+\renewcommand{\theLemma}{\arabic{Lemma}}
+\renewcommand{\theConjecture}{\arabic{Conjecture}}
+%\makeatletter
+\NewDocumentCommand{\Newline}{}{\text{\\}}
+\newcommand{\sequence}[2]{\ensuremath \left(#1,\ \dots,\ #2\right)}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\renewcommand{\listalgorithmname}{Список алгоритмов}
+\floatname{algorithm}{Листинг}
+\renewcommand{\lstlistingname}{Листинг}
+\renewcommand{\thealgorithm}{\arabic{algorithm}}
+
+\newcommand{\refAlgo}[1]{(листинг \ref{#1})}
+\newcommand{\refImage}[1]{(рисунок \ref{#1})}
+
+\renewcommand{\theenumi}{\arabic{enumi}.}% Меняем везде перечисления на цифра.цифра	
+\renewcommand{\labelenumi}{\arabic{enumi}.}% Меняем везде перечисления на цифра.цифра
+\renewcommand{\theenumii}{\arabic{enumii}}% Меняем везде перечисления на цифра.цифра
+\renewcommand{\labelenumii}{(\arabic{enumii})}% Меняем везде перечисления на цифра.цифра
+\renewcommand{\theenumiii}{\roman{enumiii}}% Меняем везде перечисления на цифра.цифра
+\renewcommand{\labelenumiii}{(\roman{enumiii})}% Меняем везде перечисления на цифра.цифра
+%\newfontfamily\AnkaCoder[Path=src/fonts/]{AnkaCoder-r.ttf}
+\renewcommand{\labelitemi}{---}
+\renewcommand{\labelitemii}{---}
+
+%\usepackage{courier}
+
+\lstdefinelanguage{Refal}{
+  alsodigit = {.,<,>},
+  morekeywords = [1]{$ENTRY},
+  morekeywords = [2]{Go, Put, Get, Open, Close, Arg, Add, Sub, Mul, Div, Symb, Explode, Implode},
+  %keyword4
+  morekeywords = [3]{<,>},
+  %keyword5
+  morekeywords = [4]{e.,t.,s.},
+  sensitive = true,
+  morecomment = [l]{*},
+  morecomment = [s]{/*}{*/},
+  commentstyle = \color{mygreen},
+  morestring = [b]",
+  morestring = [b]',
+  stringstyle = \color{purple}
+}
+
+\makeatletter
+\def\p@subsection{}
+\def\p@subsubsection{\thesection\,\thesubsection\,}
+\makeatother
+\newcommand{\prog}[1]{{\ttfamily\small#1}}
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\ttfamily\footnotesize, 
+  %basicstyle=\footnotesize\AnkaCoder,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks shoulbd only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=top,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  inputencoding=utf8,
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\bf,       % keyword style
+  language=Refal,                    % the language of the code
+  morekeywords={<,>,$ENTRY,Go,Arg, Open, Close, e., s., t., Get, Put}, 
+  							       % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  xleftmargin=25pt,
+  xrightmargin=25pt,
+  numberstyle=\small\color{black}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=8,                       % sets default tabsize to 8 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+\newcommand{\anonsection}[1]{\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{section}{\protect\numberline{}#1}
+\section*{#1}\vspace*{2.5ex} % По госту положены 3 пустые строки после заголовка ненумеруемого раздела
+}
+\newcommand{\sectionbreak}{\clearpage}
+\renewcommand{\sectionfont}{\normalsize} % Сбиваем стиль оглавления в стандартный
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % Точки в оглавлении напротив разделов
+
+\renewcommand{\cftsecfont}{\normalfont\large} % Переключение на times в содержании
+\renewcommand{\cftsubsecfont}{\normalfont\large} % Переключение на times в содержании
+
+\usepackage{caption} 
+%\captionsetup[table]{justification=raggedleft} 
+%\captionsetup[figure]{justification=centering,labelsep=endash}
+\usepackage{amsmath}    % \bar    (матрицы и проч. ...)
+\usepackage{amsfonts}   % \mathbb (символ для множества действительных чисел и проч. ...)
+\usepackage{mathtools}  % \abs, \norm
+    \DeclarePairedDelimiter\abs{\lvert}{\rvert} % операция модуля
+    \DeclarePairedDelimiter\norm{\lVert}{\rVert} % операция нормы
+\DeclareTextCommandDefault{\textvisiblespace}{%
+  \mbox{\kern.06em\vrule \@height.3ex}%
+  \vbox{\hrule \@width.3em}%
+  \hbox{\vrule \@height.3ex}}    
+\newsavebox{\spacebox}
+\begin{lrbox}{\spacebox}
+\verb*! !
+\end{lrbox}
+\newcommand{\aspace}{\usebox{\spacebox}}
+\DeclareTotalCounter{listing}
+
+\makeatletter
+\renewcommand*{\p@subsubsection}{}
+\makeatother
+    
+\begin{document}
+\sloppy
+
+\def\figurename{Рисунок}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\newpage
+
+\vspace*{-30pt}
+\hspace{-45pt}
+\begin{minipage}{0.17\textwidth}
+\hspace*{-20pt}\centering
+\includegraphics[width=1.3\textwidth]{emblem.png}
+\end{minipage}
+\begin{minipage}{0.82\textwidth}\small \textbf{
+\vspace*{-0.7ex}
+\hspace*{-10pt}\centerline{Министерство науки и высшего образования Российской Федерации}
+\vspace*{-0.7ex}
+\centerline{Федеральное государственное бюджетное образовательное учреждение }
+\vspace*{-0.7ex}
+\centerline{высшего образования}
+\vspace*{-0.7ex}
+\centerline{<<Московский государственный технический университет}
+\vspace*{-0.7ex}
+\centerline{имени Н.Э. Баумана}
+\vspace*{-0.7ex}
+\centerline{(национальный исследовательский университет)>>}
+\vspace*{-0.7ex}
+\centerline{(МГТУ им. Н.Э. Баумана)}}
+\end{minipage}
+
+\vspace{-2pt}
+\hspace{-34.5pt}\rule{\textwidth}{2.5pt}
+
+\vspace*{-20.3pt}
+\hspace{-34.5pt}\rule{\textwidth}{0.4pt}
+ 
+\vspace{0.5ex}
+\noindent \small ФАКУЛЬТЕТ\hspace{80pt} <<Информатика и системы управления>>
+
+\vspace*{-16pt}
+\hspace{35pt}\rule{0.855\textwidth}{0.4pt}
+
+\vspace{0.5ex}
+\noindent \small КАФЕДРА\hspace{50pt} <<Теоретическая информатика и компьютерные технологии>>
+
+\vspace*{-16pt}
+\hspace{25pt}\rule{0.875\textwidth}{0.4pt}
+ 
+ 
+\vspace{3em}
+ 
+\begin{center}
+\Large \bf{РАСЧЕТНО-ПОЯСНИТЕЛЬНАЯ ЗАПИСКА\\\textbf{\textit{К КУРСОВОЙ РАБОТЕ\\НА ТЕМУ:}} \\}
+\end{center}
+
+\vspace*{-6ex} 
+\begin{center}
+\Large{\textit{\textbf{<<База данных "ключ-значение" с компрессией данных>>}}}
+
+\vspace*{-3ex}
+\rule{0.9\textwidth}{1.2pt}
+
+\vspace*{-0.2ex}
+\rule{0.9\textwidth}{1.2pt}
+
+\vspace*{-0.2ex}
+\rule{0.9\textwidth}{1.2pt}
+
+\vspace*{-0.2ex}
+\rule{0.9\textwidth}{1.2pt}
+
+\vspace*{-0.2ex}
+\rule{0.9\textwidth}{1.2pt}
+\end{center}
+ 
+\vspace{\fill}
+ 
+
+\newlength{\ML}
+\settowidth{\ML}{«\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}}}
+
+\noindent Студент \underline{\hspace{1.5cm}} \hfill \underline{\hspace{4cm}}\quad
+\underline{\hspace{4cm}}
+
+\vspace{-2.1ex}
+\noindent\hspace{9ex}\scriptsize{(Группа)}\normalsize\hspace{170pt}\hspace{2ex}\scriptsize{(Подпись, дата)}\normalsize\hspace{30pt}\hspace{6ex}\scriptsize{(И.О. Фамилия)}\normalsize
+
+\bigskip
+
+\noindent Руководитель  \hfill \underline{\hspace{4cm}}\quad
+\underline{\hspace{4cm}}
+
+\vspace{-2ex}
+\noindent\hspace{13.5ex}\normalsize\hspace{170pt}\hspace{2ex}\scriptsize{(Подпись, дата)}\normalsize\hspace{30pt}\hspace{6ex}\scriptsize{(И.О. Фамилия)}\normalsize
+\vfill
+
+%\vspace{\fill}
+ 
+
+
+\begin{center}
+\textsl{2023 г.}
+\end{center}
+\end{titlepage}
+
+%\renewcommand{\ttdefault}{pcr}
+
+\setlength{\tabcolsep}{3pt}
+\newpage
+\setcounter{page}{2}
+%----------------------------------------------------------------------------
+%                  ОТСЮДА --- СОБСТВЕННО ТЕКСТ
+%----------------------------------------------------------------------------
+
+\newpage
+\renewcommand\contentsname{\hfill{\normalfont{СОДЕРЖАНИЕ}}\hfill}  %Оглавление
+\tableofcontents
+\newpage
+\section{Введение} %Введение
+Многие приложения генерируют большие объемы однотипных текстовых данных в процессе работы, что может привести к значительному расходу памяти. Для сжатия данных существуют алгоритмы компрессии, которые могут значительно уменьшать объем таких файлов. Использовать такой метод будет удобно, если реализовать компонент, представляющий собой базу данных, которая будет сжимать поступающие данные при помощи этого алгоритма. Одним из примеров подобной такой базы данных является хранение логов системы антиплагиата в формате JSON, который подходит для эффективного сжатия. В рамках выполения курсовой работы были изучены и проанализированы различные алгоритмы компрессии и разработана база данных с интерфейсом "ключ-значение" на языке C++, использующая алгоритм сжатия lzw.
+
+\section{Теоретические сведения}
+\subsection{Алгоритм LZW}
+Алгоритм Лемпеля-Зива-Велча (LZW) - это универсальный алгоритм сжатия данных без потерь, созданный трио ученых: Авраамом Лемпелем, Яаковом Зивом и Терри Велчем. Он был опубликован в 1984 году~\cite{lzw} как улучшенная версия алгоритма LZ78, предложенного Лемпелем и Зивом в 1978 году. Алгоритм был разработан таким образом, чтобы его можно было легко реализовать как программно, так и аппаратно.
+
+Алгоритм сжатия LZW работает следующим образом: символы входного потока последовательно проверяются на наличие соответствующих строк в таблице. Если строка уже существует, то алгоритм переходит к следующему символу. В противном случае, алгоритм добавляет код предыдущей найденной строки в выходной поток и добавляет новую строку в таблицу. Новые строки добавляются в таблицу по мере их появления и им соответствует уникальный код.
+
+Для декодирования используется только закодированный текст, так как алгоритм может воссоздать таблицу преобразований по этому тексту. Каждый раз, когда генерируется новый код, новая строка добавляется в таблицу, но если строка уже известна, алгоритм выводит ее код без генерации нового. Таким образом, каждая строка хранится только в одном экземпляре с уникальным номером. При декодировании при получении нового кода генерируется новая строка, а при получении уже известного, строка извлекается из таблицы.
+
+\paragraph* {Алгоритм кодирования}
+
+\begin{enumerate}
+\item Все возможные символы заносятся в словарь. Во входную фразу $X$ заносится первый символ сообщения.
+\item Считать очередной символ $Y$ из сообщения.
+\item Если $Y$ — это символ конца сообщения, то выдать код для $X$, иначе:
+    \begin{itemize}
+    \item Если фраза $XY$ уже имеется в словаре, то присвоить входной фразе значение $XY$ и перейти к Шагу 2,
+    \item Иначе выдать код для входной фразы $X$, добавить $XY$ в словарь и присвоить входной фразе значение $Y$. Перейти к Шагу 2.
+    \end{itemize}
+\end{enumerate}
+
+\paragraph* {Алгоритм декодирования}
+
+\begin{enumerate}
+\item Все возможные символы заносятся в словарь. Во входную фразу $X$ заносится первый код декодируемого сообщения.
+\item Считать очередной код $Y$ из сообщения.
+\item Если $Y$ — это конец сообщения, то выдать символ, соответствующий коду $X$, иначе: 
+    \begin{itemize}
+    \item Если фразы под кодом $XY$ нет в словаре, вывести фразу, соответствующую коду $X$, а фразу с кодом $XY$ занести в словарь. 
+    \item Иначе присвоить входной фразе код $XY$ и перейти к Шагу 2 .
+    \end{itemize}
+\end{enumerate}
+
+\vspace{20pt}
+\begin{figure}[!htb]\centering
+\includegraphics[width=0.9\textwidth]{lzw.png}
+\caption{Работа алгоритма LZW на примере строки $BABAABAAA$}
+\label{fig::thesis}
+\end{figure}
+
+\subsection{B-дерево}
+B-дерево (англ. B-tree) — сильноветвящееся сбалансированное дерево поиска, позволяющее проводить поиск, добавление и удаление элементов за $O(log n)$. B-дерево с $n$ узлами имеет высоту $O(log n)$. Количество детей узлов может быть от нескольких до тысяч (обычно степень ветвления B-дерева определяется характеристиками устройства (дисков), на котором производится работа с деревом). В-деревья также могут использоваться для реализации многих операций над динамическими множествами за время $O(log n)$.
+
+\subsubsection{Назначение B-дерева}
+B-деревья находят свою область применения в файловых системах и иных энергонезависимых носителях информации с прямым доступом, а также в базах данных. B-деревья имеют схожую структуру с красно-чёрными деревьями (например, все В-деревья с n узлами имеют высоту $O(logn)$), однако они лучше минимизируют количество операций чтения-записи с диском. 
+
+\subsubsection{Структура B-дерева}
+
+B-дерево является идеально сбалансированным, то есть глубина всех его листьев одинакова. B-дерево имеет следующие свойства ($t$ — параметр дерева, называемый минимальной степенью B-дерева, не меньший $2$.):
+
+\begin{itemize}
+    \item Каждый узел, кроме корня, содержит не менее $t - 1$ ключей, и каждый внутренний узел имеет по меньшей мере $t$ дочерних узлов. Если дерево не является пустым, корень должен содержать как минимум один ключ.
+    \item Каждый узел, кроме корня, содержит не более $2t - 1$ ключей и не более чем $2t$ сыновей во внутренних узлах
+    \item Корень содержит от $1$ до $2t - 1$ ключей, если дерево не пусто и от $2$ до $2t$ детей при высоте большей 0 .
+    \item Каждый узел дерева, кроме листьев, содержащий ключи $k1, ..., kn$, имеет n+1 сына. $i$-й сын содержит ключи из отрезка $[ki - 1; ki], k0 = -\infty, kn + 1 = \infty$.
+    \item Ключи в каждом узле упорядочены по неубыванию.
+    \item Все листья находятся на одном уровне.
+\end{itemize}
+
+Структуры узла и дерева могут быть представлены следующим образом:
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+struct Node
+    bool leaf    // является ли узел листом
+    int  n       // количество ключей узла
+    int  key[]   // ключи узла
+    Node c[]     // указатели на детей узла
+
+struct BTree
+   int  t       // минимальная степень дерева
+   Node root    // указатель на корень дерева
+\end{minted}
+
+\subsubsection{Высота B-дерева}
+Количество обращений к диску, необходимое для выполнения большинства операций с В-деревом, пропорционально его высоте. Для высоты B-дерева $h$ выполняется формула:
+
+$$h \le log_t \frac{n + 1}{2},$$
+
+где $n \ge 1$ - количесвто узлов дерева, $t \ge 2$ - минимальная степень дерева.
+
+\subsubsection{$B^+$-дерево}
+Будем рассматривать модификацию B-дерева, называемую \textbf{$B^+$}-деревом.
+
+В отличие от B-деревьев, где  во всех вершинах хранятся ключи вместе с сопутствующей информацией, в $B^+$-деревьях вся информация хранится в листьях, в то время как во внутренних узлах хранятся только копии ключей. Таким образом удается получить максимально возможную степень ветвления во внутренних узлах. Кроме того, листовой узел может включать в себя указатель на следующий листовой узел для ускорения последовательного доступа, что решает одну из главных проблем B-деревьев. 
+
+Структуры узла и дерева могут быть представлены следующим образом:
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+struct Node
+   bool leaf       // является ли узел листом
+   int  key_num    // количество ключей узла
+   int  key[]      // ключи узла
+   Node parent     // указатель на отца
+   Node child[]    // указатели на детей узла
+   Info pointers[] // если лист — указатели на данные
+   Node left       // указатель на левого брата
+   Node right      // указатель на правого брата
+
+struct BPlusTree
+   int  t          // минимальная степень дерева
+   Node root       // указатель на корень дерева
+\end{minted}
+
+\subsubsection{Высота $B^+$-дерева}
+Для высоты  $B^+$-дерева $h$ выполняется формула:
+
+$$h \le log_t \frac{n}{2} + 1,$$
+
+где $n \ge 1$ - количесвто узлов дерева, $t \ge 2$ - минимальная степень дерева. 
+
+Как можно заметить, высота $B^+$-дерева не более чем на 1 отличается от высоты B-дерева, пожтому хранение информации только в листах почти не ухудшает эффективность дерева 
+
+\subsubsection{Операции в $B^+$-дереве}
+
+B-деревья - это сбалансированные деревья, которые позволяют выполнять стандартные операции с временем выполнения, пропорциональным высоте. Основная цель алгоритмов B-дерева заключается в уменьшении количества операций ввода-вывода, что делает их особенно эффективными для работы с большими объемами информации и базами данных на дисках или других носителях информации.
+
+\paragraph{Поиск ключа}
+
+\begin{itemize}
+\item Реализуем вспомогательную функцию \textit{find\_leaf}, которая вернет лист с ключом, переданным ей:
+    \begin{enumerate}
+    \item Определим интервал и перейдем к следующему потомку.
+    \item Повторяем до тех пор, пока не достигнем листа.
+    \end{enumerate}
+\item Находим нужный лист через \textit{find\_leaf} и ищем нужный ключ в нем.
+\end{itemize}
+
+\paragraph{Добавление ключа}
+
+\begin{enumerate}
+\item Ищем лист, куда можно поместить ключ, и заносим его в список ключей.
+\item Если узел заполнен, то мы должны разделить его на два. При этом мы предполагаем, что в дереве не может быть двух одинаковых ключей.
+\item В результате выполнения операции \textit{insert} будет возвращено значение, указывающее на то, был ли добавлен новый ключ.
+\end{enumerate}
+
+\paragraph{Разбиение узла}
+
+\begin{enumerate}
+\item Добавляем первые t ключей в первый подузел и последние t-1 ключей во второй подузел.
+\item Если узел является листом, то оставшийся ключ добавляется в правое поддерево, а его копия становится разделительной точкой для двух новых поддеревьев в родительском узле.
+\item Если родительский узел уже заполнен, мы не копируем ключ, а перемещаем его в родительский узел, так как это просто дубликат.
+\item Повторяется до тех пор, пока мы не достигнем пустого узла или корня дерева.
+\item Если мы достигли корня, то мы разбиваем его на два узла, что приводит к увеличению высоты дерева.
+\end{enumerate}
+Так как минимальный ключ из второй половины всегда отправляется в родительскую вершину, каждый ключ, находящийся во внутренней вершине, является минимальным для правого поддерева этого ключа.
+\begin{figure}[H]\centering
+\includegraphics[width=0.8\textwidth]{B_Plus_tree_insetring.png}
+\caption{Схема разбиения узла в $B^+$-дереве}
+\label{fig::thesis}
+\end{figure}
+
+
+\paragraph{Удаление}
+\begin{enumerate}
+\item Ищем листовой узел, в котором находится необходимый ключ.
+\item Если узел содержит не менее t-1 ключей, где t - это степень дерева, то удаление завершено.
+\item Иначе необходимо выполнить попытку перераспределения элементов, то есть добавить в узел элемент из левого или правого брата (не забыв обновить информацию в родителе).
+\item Если это невозможно, необходимо выполнить слияние с братом и удалить ключ, который указывает на удалённый узел. Объединение может распространяться на корень, тогда происходит уменьшение высоты дерева.
+\end{enumerate}
+Так как мы считаем, что в дереве не может находиться два одинаковых ключа, то \textit{delete} будет возвращать был ли удален ключ.
+
+\subsubsection{Представление B-дерева в памяти}
+
+Кроме оперативной памяти, в компьютере используется внешний носитель, как правило, представляющий собой магнитные диски (или твердотельный накопитель). Хотя диски существенно дешевле оперативной памяти и имеют высокую емкость, они гораздо медленнее оперативной памяти из-за механического построения считывания.
+
+Для того чтобы снизить время ожидания, связанное с механическим перемещением, при обращении к диску выполняется обращение одновременно сразу к нескольким элементам, хранящимся на диске. Информация разделяется на несколько страниц одинакового размера, которые хранятся последовательно друг за другом в пределах одного цилиндра (набора дорожек на дисках на одном расстоянии от центра), и каждая операция чтения или записи работает сразу с несколькими страницами. Для типичного диска размер страницы варьируется от $2$ до $16$ КБайт. После того, как головка установлена на нужную дорожку, а диск поворачивается так, что головка становится на начало интересующей нас страницы, чтение и запись становятся полностью электронными процессами, не зависящими от поворота диска, и диск может быстро читать или писать крупные объёмы данных.
+
+В типичном приложении с B-деревом, объём хранимой информации так велик, что вся она просто не может храниться в основной памяти единовременно. Алгоритмы B-дерева копируют выбранные страницы с диска в основную память по мере надобности и записывает обратно на диск страницы, которые были изменены. Алгоритмы B-дерева хранят лишь определённое количество страниц в основной памяти в любой момент времени; таким образом, объём основной памяти не ограничивает размер B-деревьев, которые можно создавать.
+
+Система в состоянии поддерживать в процессе работы в оперативной памяти только ограниченное количество страниц. Мы будем считать, что страницы, которые более не используются, удаляются из оперативной памяти системой; наши алгоритмы работы с В-деревьями не будут заниматься этим самостоятельно. Поскольку в большинстве систем время выполнения алгоритма, работающего с В-деревьями, зависит в первую очередь от количества выполняемых операций чтения/записи с диском, желательно минимизировать их количество и за один раз считывать и записывать как можно больше информации. Таким образом, размер узла В-дерева обычно соответствует дисковой странице. Количество потомков узла В-дерева, таким образом, ограничивается размером дисковой страницы. Для больших В-деревьев, хранящихся на диске, степень ветвления обычно находится между $50$ и $2000$, в зависимости от размера ключа относительно размера страницы. Большая степень ветвления резко снижает как высоту дерева, так и количество обращений к диску для поиска ключа. Например, если есть миллиард ключей, и $t=1001$, то поиск ключа займёт две дисковые операции. 
+
+\section{Практическая реализация}
+%тут надо обозреть все модули программы с примерами кода, если кусок кода большой, бьём его на несколько маленьких, к кажому маленькому пишем описание%
+\subsection{Язык реализации}
+В языка реализации был выбран C++, так как он он имеет слвместимость с языком C, что позволяет проще реализовать интерфейс прилодения в виде библиотеки на языке C. Кроме того, в языке C++ имеются встроенные структуры данных, такие как std::map, которые реализуют эффективный по времени доступ к данным в оперативной памяти. Так же выбранный язык позволяет реализовать подоход объектно-ориентированного программирования, что упрощает написание сложного приложения.
+
+\subsection{Обзор модулей}
+Для удобства разработки было реализовано несколько модулей, представленных в виде классов, каждый из которых выполняет свою задачу.
+
+В реализации представлены следующие классы:
+
+\begin{itemize}
+    \item \textbf{BTreePackedDb} --- основной модуль базы данных, реализующий опреации вставки и чтения значений, а так же загрузки и созраниния данных,
+    \item \textbf{Compressor} --- класс, реализующий алгоритм сжатия LZW,
+    \item \textbf{Dictionary} --- класс, отвечающий за хранение табдицы для кодирования и декодирования,
+    \item \textbf{BPlusIndex} --- реализация B-дерева,
+    \item \textbf{FileHandler} --- интерфейс для взаимодействия с бинарными файлами.
+\end{itemize}
+
+Зависимость модулей друг от друга приведена в следующей диаграмме:
+
+\vspace{20pt}
+\begin{figure}[H]\centering
+\includegraphics[width=0.5\textwidth]{dependency.png}
+\caption{Диаграмма зависимости классов}
+\label{fig::thesis}
+\end{figure}
+
+\subsection{Взаимодействие с бинарными файлами}
+
+Для хранения фрагмента бинарного файла будем использовать структуру Fragment, содержащую начало и конец последовательности битов. Так же для данного класса предусмотрена сериализация в потоки вывода для удобства отладки.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+struct Fragment
+{
+	ull begin = 0;
+	ull end = 0;
+	Fragment() {}
+	Fragment(ull begin, ull end) : begin(begin), end(end) {}
+	friend ostream &operator<<(ostream &stream, const Fragment &frag);
+};
+\end{minted}
+
+\subsubsection{Класс-обработчик бинарного файла}
+
+Для чтения и записи примитивов в файлы был реализован класс \textit{FileHandler}, который реализует следующие методы:
+\begin{itemize}
+    \item Загрузка файла, создание нового файла
+    \item Запись массива целых беззнаковых чисел в файл
+    \item Запись строки в файл
+    \item Чтение массива целых беззнаковых чисел из файла
+    \item Чтение строки из файла
+\end{itemize}
+
+Для чтения строк и массивов предусмотрено 2 режима:
+\begin{itemize}
+    \item Чтение из произвольного места файла. В этом случае методу передаётся номер байта, начиная с которого производистя чтение.
+    \item Последовательное чтение. Если метод чтения вызван без аргументов, чтение происходит с того места, на котором было закончено чтения в результате предыдущей операции.
+\end{itemize}
+
+Публичный интерфейс класса выглядит следующим образом:
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+class FileHandler
+{
+public:
+	~FileHandler();
+
+	bool open(const string &filename);
+	bool create(const string &filename);
+	void close();
+	Fragment write_vector(const vector<size_t> &vec);
+	Fragment write_string(const string &str);
+
+	vector<size_t> read_vector();
+	vector<size_t> read_vector(ull pos);
+	string read_string();
+	string read_string(ull pos);
+
+	void read_pos(ull pos);
+	void clear();
+
+	bool eof();
+ ...
+\end{minted}
+
+В приватной области класса определены вспомогателные функции для записи беззнакового целого и символа, а так же методы их чтения из файла.
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+...
+private:
+	string filename;
+	ull write_pos = 0;
+	fstream file;
+	size_t write_uint(size_t val);
+	size_t write_char(char c);
+	size_t read_uint();
+	char read_char();
+};
+\end{minted}
+
+\subsubsection{Кодирование примитивов}
+
+Рассмотрим подробнее функцию записи беззнакового целого числа в файл. 
+
+Функция использует алгоритм для кодирования значений беззнаковых целых чисел, чтобы сохранить его эффективно и занимаемое пространство было минимально возможным. Для этого каждое число разбивается на группы по 7 бит, и каждая группа кодируется в один байт. Все байты, кроме последнего, имеют старший бит установленным в единицу, а у последнего байта старший бит устанавливается в ноль. Это означает, что номер последней группы может быть определен по количеству единиц в старших битах всех предыдущих байтов.
+
+Функция начинает с проверки, является ли значение равным нулю. Если это так, то функция записывает один байт со значением 128 в файл. Это означает, что число равно нулю и занимает только один байт.
+
+Затем функция использует цикл while для разбивки значения беззнакового целого числа val на группы по 7 бит и кодирования каждой группы в один байт. Она вычисляет остаток от деления значения val на 128 и записывает его в файл. Затем значение val делится на 128, чтобы перейти к следующей группе битов. Если значение $val / 128$ равно нулю, то это последняя группа битов, и старший бит устанавливается в ноль.
+
+Функция возвращает количество байтов, которые были записаны в файл.
+
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+size_t FileHandler::write_uint(size_t val)
+{
+	size_t counter = 0;
+	if (val == 0)
+	{
+		unsigned char c = 128;
+		file.write((const char *)&c, sizeof(char));
+		return sizeof(unsigned char);
+	}
+	while (val)
+	{
+		unsigned char c = val % 128;
+		if (val / 128 == 0)
+			c += 128;
+		file.write((const char *)&c, sizeof(unsigned char));
+		val /= 128;
+		counter++;
+	}
+	return counter * sizeof(unsigned char);
+}
+\end{minted}
+
+Функция \textit{write\_vector()} записывает вектор беззнаковых целых чисел (vec) в файл, используя функцию write\_uint(). Сначала в файл записываается длина вектора, а затем последовательно его элементы. В конце функция возвращает объект типа Fragment с координатами записанного фрагмента.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+Fragment FileHandler::write_vector(const vector<size_t> &vec)
+{
+	Fragment frag(write_pos, write_pos);
+	frag.end += write_uint(vec.size());
+	for (auto k : vec)
+		frag.end += write_uint(k);
+	write_pos = frag.end;
+	return frag;
+}
+\end{minted}
+
+Функции записи символов типа \textit{char} и строк имеют аналогичную структуру за тем исключением, что символ записывается как один байт.
+
+\subsubsection{Декодирование примитивов}
+
+Функция read\_uint() читает из файла беззнаковое целое число, используя алгоритм декодирования, обратный write\_uint(). Она считывает первый байт числа из файла, удаляет старший бит и добавляет его к накопителю acc, умножая на текущую степень power. Затем она увеличивает значение power, умножая его на 128 и повторяет этот процесс для следующих байтов, пока старший бит последнего байта не будет равен 0. Функция возвращает значение декодированного беззнакового целого числа.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+size_t FileHandler::read_uint()
+{
+	unsigned char c;
+	size_t acc = 0;
+	size_t power = 1;
+
+	do
+	{
+		file.read((char *)(&c), sizeof(unsigned char));
+		acc += (c & ~128) * power;
+		power *= 128;
+	} while (!(c & 128));
+
+	return acc;
+}
+\end{minted}
+
+Функция чтения вектора сначала считывает длину входной последовательности, а затем соответсвующее количество эллементов.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+vector<size_t> FileHandler::read_vector()
+{
+	vector<size_t> res;
+	size_t length = read_uint();
+	for (size_t i = 0; !eof() && i < length; i++)
+		res.push_back(read_uint());
+	return res;
+}
+\end{minted}
+
+Для работы с произвольным местом файла перед вызовом функции необходимо вызвать переход к заданной позициии:
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+void FileHandler::read_pos(ull pos)
+{
+	file.seekp(pos * sizeof(unsigned char), ios::beg);
+}
+\end{minted}
+
+
+\subsection{Хранение таблицы кодирования}
+\subsubsection{Формат хранения таблицы кодирования в файле}
+В алгоритме LZW каждой строке в таблие соответсвует свой порядковый номер, являющийся ключом. Для быстродействия работы программы таблица полностью загружается в оперативную память во время сессии. Это обусловлено тем, что к ней потребуется выполнять много обращений в процессе кодирования и декодирования. 
+
+Таким образом самый простой способ хранения таблицы LZW --- последовательность подряд идущих строк в файле. При загрузке строки помещаются в структуру std::map, что позволяет ускорить доступ к ключам по строкам.
+
+\subsubsection{Интерфейс взаимодейсвия с файлом}
+Класс Dictionary предназначен для хранения таблицы, используемой в алгоритме LZW. Он содержит методы для открытия и создания файлов, добавления строк в таблицу, получения значений по ключу или строке, проверки наличия строки в таблице. Кроме того, класс реализует оператор доступа к элементам таблицы по ключу и по строке.
+
+Закрытые данные класса включают объект FileHandler для работы с бинарными файлами, массив key\_to\_str для хранения строк по соответствующим ключам и словарь str\_to\_key для хранения ключей по соответствующим строкам.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+class Dictionary
+{
+public:
+	bool open(const string &filename);
+	bool create(const string &filename);
+
+	void add(const string &value, bool add_to_file = 1);
+	string get_str(size_t key) const;
+	std::optional<size_t> get_key(const string &str) const;
+	bool contains(const string &str) const;
+
+	string operator[](size_t key) const;
+	size_t operator[](const string &str) const;
+
+private:
+	FileHandler fh;
+	vector<string> key_to_str;
+	map<string, size_t> str_to_key;
+};
+\end{minted}
+
+При создании таблицы происходит проверка загруженной таблицы на пустоту. Если полученная таблица пуста, то её необходимо инициализировать, добавив ключи для всех однобайтовых символов. 
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+bool Dictionary::open(const string &filename)
+{
+	if (!fh.open(filename))
+		return false;
+	fh.read_pos(0);
+	while (!fh.eof())
+		add(fh.read_string(), 0);
+
+	fh.close();
+	if (!fh.open(filename))
+		return false;
+
+	if (key_to_str.size() == 0)
+	{
+		for (unsigned k = 1; k < 256; k++)
+		{
+			string str = "";
+			str.push_back(k);
+			add(str);
+		}
+	}
+
+	return true;
+}
+\end{minted}
+
+
+\subsection{Сжатие с использованием алгоритма LZW}
+Функция compress реализует алгоритм сжатия данных LZW, ей передаётся таблица замены последовательностей символов короткими кодами. Функция возвращает вектор целых чисел - компрессированный результат, где каждое число соответствует индексу значения из словаря. Алгоритм работает посимвольно, проверяет наличие последовательности символов в словаре и если такая последовательность найдена, то она добавляется к текущей строке acc, иначе значение текущей строки записывается в результат res, добавляется новая запись в словарь и текущая строка устанавливается в символ c. Алгоритм заканчивает работу, добавляя в результат последний элемент словаря, соответствующий последней строке acc.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+vector<size_t> compressLZW(Dictionary &dict, const string &str)
+{
+	vector<size_t> res;
+	string acc = "";
+	for (char c : str)
+	{
+		if (dict.contains(acc + c))
+		{
+			acc += c;
+		}
+		else
+		{
+			res.push_back(dict[acc]);
+			dict.add(acc + c);
+			acc = c;
+		}
+	}
+	res.push_back(dict[acc]);
+	return res;
+}
+\end{minted}
+
+Функция decompress реализует расшировку упакованных данных. Она последовательно извлекает ключи из вектора и суммирует соответствующие подстроки в финальную строку.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+string decompress(const Dictionary &dict, const vector<size_t>& arr)
+{
+	string res = "";
+	for (auto key : arr)
+	{
+		res += dict[key];
+	}
+	return res;
+}
+\end{minted}
+
+\subsection{Реализация $B^+$-дерева}
+
+Для реализации $B^+$-дерева был применен механизм шаблонов языка C++. Это позволило создать создать класс 
+$B^+$-дерева не зависящим от типа ключа. К типу ключа предъявлятся лишь следующин требования: ключ должен быть фиксированного размера и для него должны быть определены операции сравнения.
+
+Это также позволило упростить реализацию класса: размер экземпляра узла определяется на этапе компиляции, что позволяет манипулировать узлами без использования динамической памяти. Обратной стороной выбранного решения является невозможность изменить размер ключа и/или узла в процессе работы программы. Однако для экспериментального кода не прдназначеннного для промышленного использования такое решение приемлемо. 
+
+\subsubsection{Класс B-дерева}
+
+Каждый узел $B^+$-дерева описывается шаблоном 
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c++}
+template <typename K> struct BPlusRecord
+{
+    K key;
+    size_t value;
+};
+template <typename K, int SIZE> class BPlusNode
+{
+    size_t count;
+    size_t left_node_pos;
+    BPlusRecord<K> records[SIZE];
+}
+\end{minted}
+
+Таким образом размер каждого узла фиксирован и определяется произведением размера ключа $K$ на количество
+ключей в узле $SIZE$. Размер узла для максимальной скорости работы можнет быть подобран экспериметально, так, чтобы за одно обращение к внешнему носителю загружался один узел целиком.
+
+Каждый экземпояр $BPlusNode$ может выполнять роль как внутреннего, так и листового узла. Это накладывает ограничение
+на тип данных, хранимый в листовом узле. Так как во внутреннем узле тип хранимых данных должен быть ссылкой на узлел-потомок (номер узла-потомка в файле), то и хранимые в листе данные тоже могут быть только числом. Типом данных для хранения был выбран $size\_t$. Это компромиссное решение: для номера узла в дереве 64-битный тип слишком велик, можно обойтись 32-битным, а для пользовательских данных, которые могут представлять собой например позицию в файле 64-битный тип слишком мал. Для решения этой проблемы улучшенная реализация могла бы использовать разные типы для корневого и листового узлов, возможно храня их в отдельных файлах.
+
+Поле $left\_node\_pos$ используется только внутренними узлами. В нем хранится номер узла-потомка для ключей меньших,
+чем $records[0].key$. Таким образом внутренний узел с количеством ключей $count$ определяет $count^+1$ интервал и хранит ссылки на $count+1$ потомков.
+
+\subsubsection{Формат хранения $B^+$-дерева в файле}
+
+$B^+$-дерево записывается в файл поблочно, блоками фиксированного размера. Каждый блок является экземпляром класса 
+$BPlueNode$. Корневой узел всегда находится на нулевой позиции в файле. В начале работы корневой узел является также и листовым. Когда количество добавленных ключей превышает размер узла, узел разделяется на две части. Левая часть остается на старой позиции в файле, а правая добавляется к концу файла. Указатель на позицию добавленного узла добавляется к узлу-родителю. Если родитель также переполняется, процедура повторяется.
+
+Дополнительно обрабатывается ситуация, когда переполняется корневой узел. В этом случае левая часть корневого узла
+также переносится в конец файлв, а в нулевую позицию записывается корневой узел с двумя потомками - половинами 
+быашего корневого узла. 
+
+\subsubsection{Главный класс $B^+$-дерева}
+
+Основной класс индекса $BPlusIndex$ также является шаблоном от типа ключа и количества ключей.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+template <typename K, int SIZE> class BPlusIndex
+{
+public:
+    bool create(const string &filename);
+    bool open(const string &filename)
+    size_t get_nodes_count()
+    size_t get_keys_count();
+    optional<size_t> get(const K &key);
+    void put(const K &key, size_t value);
+}
+\end{minted}
+
+Класс предоставляет методы для создания нового файла, открытия существующего файла и методы для добавления и получения
+значения тика $size_t$ по ключу $K$, 
+
+Класс не реализует кеширования узлов: при каждом обращении к узлу происходит
+обращение напосредственно к файлу. Такое решение не подходит для промышленного использования, но зато позволяет провести эксперименты по определению зависимости скорости работы от размера узла без дополнительных факторов.
+
+\subsubsection{Дополнительный класс для $B^+$-дерева со строковым ключом}
+
+Для удобства работы со строковыми ключами реализован шаблонный класс $BPlusIndexCharBuf$. Данный класс упрощает работу
+со строковыми ключами, позволяя вызывать методы $get$ и $put$ с параметром ключа $const char*$. Шаблон принимает
+параметры $SIZE\_BUF$ - размер строкового ключа в индексе и $SIZE$ - количество ключей в узле.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+template <int BUF_SIZE, int SIZE>
+class BPlusIndexCharBuf : public BPlusIndex<BPlusCharBuf<BUF_SIZE>, SIZE> {};
+\end{minted}
+
+$BPlusIndexCharBuf$ является пустым, так как возможность вызывать $get$ и $put$ с параметром ключа $const char*$ фактически реализована в $BPlusCharBuf$, который является оберткой для $char [BUFF\_SIZE]$ с конструктором из $const char*$ и операциями сравнения, необходимыми для $BPlusIndex$.
+
+\subsection{Структура базы данных}
+\subsubsection{Формат хранения базы данных в файле}
+\subsubsection{Класс базы данных в C++}
+
+Интерфейс на C++ фактически повторяет интерфейс класса $BPlusIndex$ с той лишь разницей, что типом данных
+для записи и извлечения является строка.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+class BTreePackedDb
+{
+public:
+    BTreePackedDb(const char *basename);
+    bool create();
+    bool open();
+    void put(const string &key, const string &value);
+    const char *get(const string &key);
+private:
+    ...
+    BPlusIndexCharBuf<BTREE_KEY_SIZE, BTREE_NODE_SIZE> index;
+    FileHandler data;
+    Dictionary dictionary;  
+
+    string buf;
+}
+\end{minted}
+
+Параметры размера ключа $BTREE\_KEY\_SIZE$ и количества ключей в узле $BTREE\_NODE\_SIZE$ определяются на этапе компиляции.
+
+База состоит из трех файлов: файла индекса ($index$, файла словаря $dictionary$ и файла упакованных строк $data$. 
+
+При добавлении записи:
+
+\begin{itemize}
+    \item строка $value$ пакуется алгоритмом LZW и обновленный словарь записывается в $dictionary$
+    \item упакованные данные пишутся в файлу строк $data$
+    \item позиция в $data$ сохраняется в $index$ с ключом $key$
+\end{itemize}
+
+Извлечение происходит в обрастном порядке: в индексе находится позиция упакованных данных, данные извлекаются и распоковываются. Распаковка выполняется во внутренний буфер класса и метод $get$ возвращает указатель на буфер. Указатель остается валидным до нового вызова $get$.
+
+\subsection{Интерфейс на языке C}
+
+Для использоваия базы из языка C предоставляется структура 
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+struct btree_packed_db
+{
+    void *data;
+};
+\end{minted}
+
+Данная структура содержит указатель на экземпляр $BTreePackedDb$ в динамической памяти. Для создания, ударения и работы с базой предоставляются функции, повторяющие методы класса $BTreePackedDb$.
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+struct btree_packed_db *btree_packed_db_open(const char *basename);
+struct btree_packed_db *btree_packed_db_create(const char *basename);
+void btree_packed_db_close(struct btree_packed_db *db);
+void btree_packed_db_put(struct btree_packed_db *db, const char *key, const char *value);
+const char *btree_packed_db_get(struct btree_packed_db *db, const char *key);
+\end{minted}
+
+\section{Тестирование}
+В проекте реализовны модульные и интеграционные тесты. 
+
+Модульные тесты находятся в директории $tests$ и могут быть запущены в автоматическом режиме с использованием тестирующей системы $CTest$, являющейся частью системы построения $CMake$
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+mkdir build
+cd build
+cmake ..
+cmake --build . --target tests --config Release
+ctest -C Release
+\end{minted}
+
+Интеграционные тесты реализованы в вииде утилит $pack$ и $unpack$ находящиеся в директории $examples$. Утилиты принимают три параметра: имя базы данных, текстовый файл с ключами, текстовый файл со значениями. Утилита $pack$ сканирует построчно файлы с ключами и значениями и добавляет пары ключ-значение в базу. Утилита $unpack$ сканирует файл с ключами и пишет в файл со значениями строки, извлеченные из базы.
+
+Сценарий интеграционного теста следующий:
+
+\begin{enumerate}
+    \item $pack testbase keys.txt keys.txt$  - ключ равен значению для удобства тестирования
+    \item $unpack testbase keys.txt keys.out$  - файл keys.out должен содержать те же строки. что и исходный keys.txt    
+\end{enumerate}
+
+\section{Анализ результатов}
+Был проведен эксперимент по измерению зависимости скорости записи и чтения $B^+$-дерева в зависимости от размера узла. Был использовал следующий скрипт для cmd.exe под Windows:
+
+\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+for /D %%i in (8, 80, 800, 8000, 80000) do call :test %1 %%i
+goto :eof
+
+:test
+cmake ../.. -DBTREE_NODE_SIZE=%2 -DBTREE_KEY_SIZE=128
+cmake --build ../.. --target examples --config Release
+echo %2 >> result.txt
+echo %time% >> result.txt
+pack db %1 %1
+echo %time% >> result.txt
+unpack db %1 nul
+echo %time% >> result.txt
+exit /b
+\end{minted}
+
+На каждом шагу библиотека перекомпилировалась с новым размером узла и фиксированным размером ключа. После компиляции запускалась упаковка 30 мегабайт уникальных ключей в базу и извлечение этих ключей из базы. Замерялось время, затраченное на запись и чтение всех ключей. Использовались модифицированные версии $pack$ и $unpack$ с отключенной упаковкой / распаковкой, проверялась только скорость работы двоичного дерева.
+
+Результат измерения в таблице:
+
+\begin{table}[htbp]
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+     Размер узла & 1K & 10K & 100K & 1M & 10M \\
+    \hline
+     Запись & 26 с & 25 с & 115 c & 1 c & 1 c \\
+    \hline
+    Чтение & 22 c & 22 с & 100 c & 1 c & 1 c  \\
+    \hline
+  \end{tabular}
+\end{table}
+
+
+\section{Перспективы дальнейшего развития}
+\subsection{Кэширование записей}
+В текущей реализации чтение для получения данных из хранилища необходимо каждый раз заново читать данные с диска. Можно уменьшить количество обращений к диску, если реализовать кэш, то есть in-memory хранилище, в котором будет хранится ограниченное количество данных, и этот набор будет обновлятся при чтении или записи, вытесняя одни данные, и заменяя их другими. Такой подход имеет как преимущества, так и недостатки, к преимуществам можно отнести сокращение количества походов на диск при частом чтении одних и тех же записей, а к недостаткам - необходимость либо лишнего копирования, если данные в кэше будут сразу же записываться на физическое устройство, либо необходимость поддерживать состояние данных, когда они есть в оперативной памяти, но еще не записаны на диск. Интеграция данной функциональности требует дальнейшего анализа и тестирования.
+
+\subsection{Многопоточный режим работы}
+В настоящий момент база данных может работать только в однопоточном режиме, то есть ее методы могут быть вызваны только из одного и того же потока, попытка конкурентного доступа может обернутся гонкой условий, которая может привести к неконсистентному состоянию базы данных. Разумеется, можно добавить примитивы синхронизации, которые будут контролировать, чтобы в критические секции мог войти только один поток, но такой подход замедлит работу в одном потоке, и не позволит выиграть в производительности при работе в нескольких потоках. Если мы хотим обеспечить полноценную поддержку многопоточного чтения или записи, необходимо создание схемы параллельного доступа к данным.
+
+\anonsection{ЗАКЛЮЧЕНИЕ}
+В рамках курсовой работы были изучены алгоритмы и проанализированны алгоритмы сжатия, такие как алгоритм Лемпеля — Зива — Уэлча, была изучена структура хранения пар ключ-значения в виде $B^+$-дерева. Была разработана база данных с интерфейсом "ключ-значение"на языке C++, использующая алгоритм сжатия LZW. Был разработан формат хранения базы данных на диске. 
+
+Разработка производилась с поддержкой модульного тестирвоания. К готовой реализации был создан программный интерфейс на языке C.
+
+Реализация была проанализирована на быстродействие с использованием разных конфигураций хранения.
+
+
+\renewcommand\refname{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}
+% Список литературы
+\clearpage
+%\bibliographystyle{ugost2008s}  %utf8gost71u.bst} %utf8gost705u} %gost2008s}
+{\catcode`"\active\def"{\relax}
+\addcontentsline{toc}{section}{\protect\numberline{}\refname}%
+%\bibliography{biblio} %здесь ничего не меняем, кроме, возможно, имени bib-файла
+\printbibliography
+}
+\newpage
+\settocdepth{section}
+
+
+\end{document}
