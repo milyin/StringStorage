@@ -41,16 +41,14 @@ int main(int argc, char *argv[])
     }
 
     // Open files with keys and values
-    FILE *keys;
-    fopen_s(&keys, keysname, "r");
+    FILE *keys = fopen(keysname, "r");
     if (!keys)
     {
         printf("Error opening keys file\n");
         return 1;
     }
 
-    FILE *values;
-    fopen_s(&values, valuesname, "r");
+    FILE *values = fopen(valuesname, "r");
     if (!values)
     {
         printf("Error opening values file\n");

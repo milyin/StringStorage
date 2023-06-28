@@ -41,10 +41,8 @@ int main(int argc, char *argv[])
     }
 
     // Open files with keys and values
-    FILE *keys;
-    fopen_s(&keys, keysname, "r");
-    FILE *values;
-    fopen_s(&values, valuesname, "w");
+    FILE *keys = fopen(keysname, "r");
+    FILE *values = fopen(valuesname, "w");
 
     // Read keys and values from files
     char key[BTREE_KEY_SIZE];

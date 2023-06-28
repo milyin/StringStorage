@@ -11,3 +11,5 @@ endfunction()
 
 add_example(pack)
 add_example(unpack)
+add_example(pack_file)
+add_example(unpack_file)

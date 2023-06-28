@@ -5,6 +5,7 @@
 #include <optional>
 #include <assert.h>
 #include <string.h>
+#include <vector>
 
 const size_t IS_LEAF_NODE = std::numeric_limits<size_t>::max();
 // const size_t UNDEFINED_NOONE_POS = std::numeric_limits<size_t>::max() - 1;
@@ -344,12 +345,12 @@ struct BPlusCharBuf
     }
     BPlusCharBuf(const char *str)
     {
-        strncpy_s(buf, str, BUF_SIZE);
+        strncpy(buf, str, BUF_SIZE);
     }
     // Assignment operator
     BPlusCharBuf &operator=(const char *str)
     {
-        strncpy_s(buf, str, BUF_SIZE);
+        strncpy(buf, str, BUF_SIZE);
         return *this;
     }
     // Comparison operators
