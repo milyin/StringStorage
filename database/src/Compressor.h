@@ -25,6 +25,7 @@ public:
 	size_t operator[](const string &str) const;
 
 private:
+	size_t key_limit = 1000000;
 	FileHandler fh;
 	// Todo: change from string to descriptor
 	vector<string> key_to_str;

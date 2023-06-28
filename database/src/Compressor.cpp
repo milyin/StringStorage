@@ -40,6 +40,9 @@ bool Dictionary::open(const string &filename)
 
 void Dictionary::add(const string &value, bool add_to_file)
 {
+	if (key_to_str.size() >= key_limit) {
+		return;
+	}
 	// cout << "added \"" << value << "\"\n";
 	size_t key = key_to_str.size();
 	key_to_str.push_back(value);
