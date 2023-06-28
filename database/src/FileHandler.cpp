@@ -119,6 +119,11 @@ bool FileHandler::eof()
 	return 1;
 }
 
+ull FileHandler::get_file_size()
+{
+	return write_pos;
+}
+
 size_t FileHandler::write_uint(size_t val)
 {
 	size_t counter = 0;

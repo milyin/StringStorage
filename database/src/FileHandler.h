@@ -41,6 +41,8 @@ public:
 
 	bool eof();
 
+	ull get_file_size();
+
 private:
 	string filename;
 	ull write_pos = 0;
